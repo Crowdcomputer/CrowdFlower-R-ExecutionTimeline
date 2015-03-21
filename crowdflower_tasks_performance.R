@@ -12,8 +12,6 @@ library(lubridate)
 library(ggplot2)
 library(scales)
 
-source("crowdflower_secret.R")
-
 dumb_start_time <- as.POSIXct("03/19/2015 00:00:00", format='%m/%d/%Y %H:%M:%S')
 
 createPlot <- function(data, filename, binwidth, width, height, faceting){
@@ -22,11 +20,11 @@ createPlot <- function(data, filename, binwidth, width, height, faceting){
 	hist_plot <- hist_plot + geom_histogram(binwidth=binwidth, position="identity", alpha = 0.6, color="black")
 	# plot labels
 	hist_plot <- hist_plot + xlab("Time") + ylab("Tasks completed") #+ ggtitle("Streaming") 
-	hist_plot <- hist_plot + scale_x_datetime(breaks = date_breaks("20 min"),labels = date_format("%H:%M"))
+	hist_plot <- hist_plot + scale_x_datetime(breaks = date_breaks("20 min"), minor_breaks = date_breaks("10 min"),labels = date_format("%H:%M"))
 	# split into facets
 	hist_plot <- hist_plot + facet_grid(faceting)
-	# font size
-	hist_plot <- hist_plot + theme(title = element_text(size=16),strip.text = element_text(size = 16), strip.text.y = element_text(angle = 0) ) 
+	# font size, theme settings
+	hist_plot <- hist_plot + theme(text = element_text(size=12, color = "black"), axis.text = element_text(size=12, color = "black"), title = element_text(size=16),strip.text = element_text(size = 16), strip.text.y = element_text(angle = 0),axis.title.y=element_text(vjust=1.5)) 
 	# task end vertical lines
 	hist_plot <- hist_plot+ geom_vline(aes(xintercept=fin, colour = batch), data)
 	# save the plot into the file
@@ -36,6 +34,7 @@ getJobResults <- function(job_id, title, batch, streaming, subtract, scope, down
 
 	# (comment if is already downloaded)download the latest zip file with full results for the target job
 	if (download){
+		source("crowdflower_secret.R")
 		download(paste("https://api.crowdflower.com/v1/jobs/",job_id,".csv?type=full&key=",CROWDFLOWER_SECRET_KEY, sep = ""), mode = "wb", destfile = paste("output/",job_id,".zip", sep=""))
 	}
 	# read the csv from the zip file

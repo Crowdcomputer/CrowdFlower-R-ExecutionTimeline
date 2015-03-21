@@ -37,4 +37,4 @@ batches_all <- rbind(batches_with_streaming,batches_no_streaming)
 # PLOT GENERATION
 #####################################################################
 
-createPlot(batches_all,"example.pdf",150, 16,4, task~streaming )
+createPlot(batches_all,"plots/streaming_comparison.pdf",150, 16,4, task~streaming )
