@@ -16,10 +16,10 @@ source("crowdflower_secret.R")
 
 dumb_start_time <- as.POSIXct("03/19/2015 00:00:00", format='%m/%d/%Y %H:%M:%S')
 
-createPlot <- function(data, filename, width, height, faceting){
+createPlot <- function(data, filename, binwidth, width, height, faceting){
 	hist_plot <- ggplot(data, aes(x=X_relative_time,y=..count.., fill = batch))
 	# plot histogram
-	hist_plot <- hist_plot + geom_histogram(binwidth=120, position="identity", alpha = 0.6, color="black")
+	hist_plot <- hist_plot + geom_histogram(binwidth=binwidth, position="identity", alpha = 0.6, color="black")
 	# plot labels
 	hist_plot <- hist_plot + xlab("Time") + ylab("Tasks completed") #+ ggtitle("Streaming") 
 	hist_plot <- hist_plot + scale_x_datetime(breaks = date_breaks("20 min"),labels = date_format("%H:%M"))
